@@ -1,38 +1,73 @@
+let tasks = [];
+
 function addTask() {
     let input = document.getElementById("taskInput");
     let taskText = input.value;
 
     if (taskText === "") return;
 
-    let li = document.createElement("li");
+    let task = {
+        text: taskText,
+        status: "pending"
+    };
 
-    li.innerHTML = `
-        <span class="task-text">${taskText}</span>
-        <button class="edit-btn">Edit</button>
-    `;
-
-    document.getElementById("taskList").appendChild(li);
-
+    tasks.push(task);
     input.value = "";
+
+    displayTasks(tasks);
 }
 
+function displayTasks(taskArray) {
+    let list = document.getElementById("taskList");
+    list.innerHTML = "";
 
-// EDIT TASK FEATURE
-document.addEventListener("click", function(e) {
+    taskArray.forEach((task, index) => {
+        let li = document.createElement("li");
 
-    if (e.target.classList.contains("edit-btn")) {
+        let span = document.createElement("span");
+        span.innerText = task.text + " (" + task.status + ")";
 
-        let taskItem = e.target.parentElement;
+        // Toggle complete
+        span.onclick = function () {
+            task.status = task.status === "pending" ? "completed" : "pending";
+            displayTasks(tasks);
+        };
 
-        let taskText = taskItem.querySelector(".task-text");
+        // EDIT BUTTON (YOUR FEATURE ADDED HERE)
+        let editBtn = document.createElement("button");
+        editBtn.innerText = "Edit";
 
-        let currentText = taskText.innerText;
+        editBtn.onclick = function () {
+            let newText = prompt("Edit your task:", task.text);
 
-        let newText = prompt("Edit your task:", currentText);
+            if (newText !== null && newText !== "") {
+                task.text = newText;
+                displayTasks(tasks);
+            }
+        };
 
-        if (newText !== null && newText !== "") {
-            taskText.innerText = newText;
-        }
+        let deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Delete";
+
+        deleteBtn.onclick = function () {
+            tasks.splice(index, 1);
+            displayTasks(tasks);
+        };
+
+        li.appendChild(span);
+        li.appendChild(editBtn);
+        li.appendChild(deleteBtn);
+
+        list.appendChild(li);
+    });
+}
+
+// FILTER FUNCTION
+function filterTasks(type) {
+    if (type === "all") {
+        displayTasks(tasks);
+    } else {
+        let filtered = tasks.filter(task => task.status === type);
+        displayTasks(filtered);
     }
-
-});
+}
