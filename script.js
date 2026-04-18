@@ -1,0 +1,41 @@
+function addTask() {
+    let input = document.getElementById("taskInput");
+    let taskText = input.value;
+
+    if (taskText === "") return;
+
+    let li = document.createElement("li");
+
+    li.innerHTML = `
+        <span class="task-text">${taskText}</span>
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+    `;
+
+    document.getElementById("taskList").appendChild(li);
+
+    input.value = "";
+}
+
+// EDIT + DELETE 
+document.addEventListener("click", function (e) {
+
+    // ✏️ EDIT
+    if (e.target.classList.contains("edit-btn")) {
+        let taskItem = e.target.parentElement;
+        let taskText = taskItem.querySelector(".task-text");
+
+        let currentText = taskText.innerText;
+        let newText = prompt("Edit your task:", currentText);
+
+        if (newText !== null && newText !== "") {
+            taskText.innerText = newText;
+        }
+    }
+
+    // ❌ DELETE
+    if (e.target.classList.contains("delete-btn")) {
+        let taskItem = e.target.parentElement;
+        taskItem.remove();
+    }
+});
