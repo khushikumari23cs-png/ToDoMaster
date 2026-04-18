@@ -17,7 +17,7 @@ function addTask() {
 }
 
 
-// EDIT TASK FEATURE (TUMHARA KAAM)
+// EDIT TASK FEATURE
 document.addEventListener("click", function(e) {
 
     if (e.target.classList.contains("edit-btn")) {
