@@ -27,10 +27,23 @@ function displayTasks(taskArray) {
         let span = document.createElement("span");
         span.innerText = task.text + " (" + task.status + ")";
 
-        // ✅ Toggle complete on click
+        // Toggle complete
         span.onclick = function () {
             task.status = task.status === "pending" ? "completed" : "pending";
             displayTasks(tasks);
+        };
+
+        // EDIT BUTTON (YOUR FEATURE ADDED HERE)
+        let editBtn = document.createElement("button");
+        editBtn.innerText = "Edit";
+
+        editBtn.onclick = function () {
+            let newText = prompt("Edit your task:", task.text);
+
+            if (newText !== null && newText !== "") {
+                task.text = newText;
+                displayTasks(tasks);
+            }
         };
 
         let deleteBtn = document.createElement("button");
@@ -42,13 +55,14 @@ function displayTasks(taskArray) {
         };
 
         li.appendChild(span);
+        li.appendChild(editBtn);
         li.appendChild(deleteBtn);
 
         list.appendChild(li);
     });
 }
 
-// ✅ FILTER FUNCTION
+// FILTER FUNCTION
 function filterTasks(type) {
     if (type === "all") {
         displayTasks(tasks);
