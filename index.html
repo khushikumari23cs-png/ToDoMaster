@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ToDoMaster</title>
-  <link rel="stylesheet" href="style.css">
+    <title>ToDoMaster</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="container">
+<div class="container">
     <h1>ToDoMaster</h1>
 
     <div class="input-section">
-      <input type="text" placeholder="Enter task">
-      <button>Add</button>
+        <input type="text" id="taskInput" placeholder="Enter task">
+        <button onclick="addTask()">Add</button>
     </div>
 
+    <br>
+
+    <!-- ✅ FILTER BUTTONS -->
+    <button onclick="filterTasks('all')">All</button>
+    <button onclick="filterTasks('completed')">Completed</button>
+    <button onclick="filterTasks('pending')">Pending</button>
+
     <ul id="taskList"></ul>
-  </div>
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
