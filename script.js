@@ -8,22 +8,18 @@ window.onload = function () {
 
 function addTask() {
     let input = document.getElementById("taskInput");
-    let taskText = input.value;
+    let text = input.value;
 
-    if (taskText === "") return;
+    if (text === "") return;
 
     let task = {
-        text: taskText,
+        text: text,
         status: "pending"
     };
 
     tasks.push(task);
-
-    // Save to localStorage
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-
+    saveAndDisplay();
     input.value = "";
-    displayTasks(tasks);
 }
 
 function displayTasks(taskArray) {
@@ -34,44 +30,46 @@ function displayTasks(taskArray) {
         let li = document.createElement("li");
 
         let span = document.createElement("span");
-        span.innerText = task.text + " (" + task.status + ")";
+        span.innerText = task.text;
+
+        if (task.status === "completed") {
+            span.classList.add("completed");
+        }
 
         // Toggle complete
         span.onclick = function () {
             task.status = task.status === "pending" ? "completed" : "pending";
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            displayTasks(tasks);
+            saveAndDisplay();
         };
 
-        // Edit button
+        // Edit
         let editBtn = document.createElement("button");
         editBtn.innerText = "Edit";
         editBtn.onclick = function () {
-            let newText = prompt("Edit your task:", task.text);
+            let newText = prompt("Edit task:", task.text);
             if (newText !== null && newText !== "") {
                 task.text = newText;
-                localStorage.setItem("tasks", JSON.stringify(tasks));
-                displayTasks(tasks);
+                saveAndDisplay();
             }
         };
 
-        // Delete button
+        // Delete
         let deleteBtn = document.createElement("button");
         deleteBtn.innerText = "Delete";
         deleteBtn.onclick = function () {
             tasks.splice(index, 1);
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            displayTasks(tasks);
+            saveAndDisplay();
         };
 
         li.appendChild(span);
         li.appendChild(editBtn);
         li.appendChild(deleteBtn);
+
         list.appendChild(li);
     });
 }
 
-// Filter function
+// Filter tasks
 function filterTasks(type) {
     if (type === "all") {
         displayTasks(tasks);
@@ -79,4 +77,10 @@ function filterTasks(type) {
         let filtered = tasks.filter(task => task.status === type);
         displayTasks(filtered);
     }
+}
+
+// Save + refresh
+function saveAndDisplay() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    displayTasks(tasks);
 }
